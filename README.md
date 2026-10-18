@@ -4,10 +4,6 @@ Read-only Git history for the current Paseo workspace.
 
 ![Paseo Git Graph panel](assets/git-graph-overview.png)
 
-Branch and remote refs share one neutral pill; the checked-out branch is outlined in its accent colour.
-
-![Branch and remote labels](assets/branch-labels.png)
-
 ## Open it
 
 1. Open a Git-backed Paseo workspace.
