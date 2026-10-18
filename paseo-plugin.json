@@ -1,7 +1,11 @@
 {
   "id": "paseo-git-graph",
+  "name": "Paseo Git Graph",
   "description": "Read-only Git history, branch graph, file summaries, and patches for the current workspace.",
-  "media": [],
+  "media": [
+    "assets/git-graph-overview.png",
+    "assets/branch-labels.png"
+  ],
   "requirements": {
     "paseo": ">=0.11.4"
   }

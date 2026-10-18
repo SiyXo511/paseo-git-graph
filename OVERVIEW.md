@@ -1,26 +1,32 @@
-<!--
-OVERVIEW.md is required to list your plugin in the registry. Keep it beside
-paseo-plugin.json in your repository at the pinned commit and in your npm package.
-Replace this comment with useful facts before publishing.
+# Paseo Git Graph
 
-This overview is for people choosing a plugin in Paseo, on the plugin page under
-its install command. README assumes a GitHub audience and includes technical
-details, installation instructions, and badges. Long, AI-generated READMEs leave
-people reading past that material to understand what the plugin does.
+Paseo Git Graph adds a read-only history panel to a Paseo workspace. It shows the
+commit graph, branch and tag labels, commit metadata, the files changed by a
+commit, and the patch for each changed file.
 
-Write these parts in order, including only what helps someone decide to install:
+The panel binds to the workspace that opened it. It reads the local Git
+repository with bounded read-only commands, so the graph does not depend on a
+model request or a separate server. Opening or refreshing the panel does not
+fetch from a remote.
 
-1. Describe what your plugin is and does in plain terms first.
-2. Explain how it works only when it is not obvious.
-3. Explain setup when needed: settings, accounts, tokens, providers, tools, or
-   other plugins. Include applicable daemon version and operating system
-   requirements. Setup guidance is allowed; installation instructions are not.
-4. Explain capabilities and settings worth understanding, what each option does,
-   what the plugin reads or sends and where, permissions, and known limits.
+## Use
 
-Length follows complexity; a theme needs one paragraph. Choose headings only
-when they help. Use sentence case and plain factual language, with no em dashes.
-Omit installation commands, badges, changelog, contributing or license sections,
-marketing, and unsupported claims. Avoid implementation filler such as empty
-cleanup functions, theme-token field lists, or lists of absent features.
--->
+Open the workspace tab menu and choose Git Graph. The panel loads 200 commits
+and appends the next 200 when the list reaches the end. Click a commit to see
+its file summary; click a file to load its unified patch.
+
+The panel requires Paseo 0.11.4 or newer and a Git repository in the workspace.
+Git must be available on the daemon host. There are no accounts, tokens, or
+plugin settings.
+
+## Access and limits
+
+The plugin reads commit metadata, refs, working-tree status, file summaries, and
+patches from the local repository. It does not send repository data to a
+provider. It does not expose checkout, merge, rebase, reset, cherry-pick,
+revert, branch deletion, tag creation, stash, fetch, pull, push, or file
+editing.
+
+Very large repositories are loaded incrementally. Patch text is requested only
+for the file opened, and binary files are reported as binary instead of being
+shown as text.
