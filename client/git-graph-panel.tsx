@@ -35,8 +35,10 @@ export function GitGraphPanel({ theme, layout, workspaceId }: PluginWorkspacePan
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [requestError, setRequestError] = useState<string | null>(null);
+  const [panelWidth, setPanelWidth] = useState<number | null>(null);
   const generation = useRef(0);
   const directory = workspace?.directory ?? null;
+  const compact = layout.compact || (panelWidth !== null && panelWidth < 640);
 
   const loadFirstPage = useCallback(async () => {
     if (!directory) return;
@@ -191,7 +193,10 @@ export function GitGraphPanel({ theme, layout, workspaceId }: PluginWorkspacePan
   const errorCopy = error ? graphErrorCopy(error) : null;
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.surface0 }}>
+    <View
+      onLayout={(event) => setPanelWidth(event.nativeEvent.layout.width)}
+      style={{ flex: 1, minWidth: 0, overflow: "hidden", backgroundColor: theme.colors.surface0 }}
+    >
       <View
         style={{
           height: 34,
@@ -223,7 +228,7 @@ export function GitGraphPanel({ theme, layout, workspaceId }: PluginWorkspacePan
         {branchLabel ? (
           <View
             style={{
-              maxWidth: layout.compact ? 160 : 280,
+              maxWidth: compact ? 160 : 280,
               height: 22,
               paddingHorizontal: 8,
               flexDirection: "row",
@@ -280,7 +285,7 @@ export function GitGraphPanel({ theme, layout, workspaceId }: PluginWorkspacePan
         <GraphList
           rows={displayRows}
           theme={theme}
-          compact={layout.compact}
+          compact={compact}
           currentBranch={state?.head.branch ?? null}
           loadingMore={loadingMore}
           onEndReached={() => void loadMore()}

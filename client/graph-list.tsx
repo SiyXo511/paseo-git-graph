@@ -8,21 +8,17 @@ import type { PatchState } from "./patch-state";
 import { selectedRowIndex, type RefBadge, type DisplayRow } from "./graph-rows";
 import { GraphLanes, laneColor, maxGraphWidth } from "./graph-lanes";
 import { laneX } from "./graph-geometry";
+import { formatCommitDate } from "./format-date";
 
 const ROW_HEIGHT = 24;
 const GRAPH_WIDTH_MIN = 180;
 const COMPACT_GRAPH_WIDTH_MIN = 96;
 const META_WIDTH = {
-  date: 82,
+  date: 132,
+  dateCompact: 116,
   author: 92,
   commit: 70,
 } as const;
-
-function formatDate(value: string): string {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return "";
-  return parsed.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-}
 
 function RefPill({
   badge,
@@ -136,6 +132,7 @@ const CommitRow = memo(function CommitRow({
         height: ROW_HEIGHT,
         flexDirection: "row",
         alignItems: "center",
+        overflow: "hidden",
         backgroundColor: selected ? theme.colors.surface2 : theme.colors.surface0,
         borderBottomWidth: 1,
         borderBottomColor: `${theme.colors.border}55`,
@@ -181,8 +178,15 @@ const CommitRow = memo(function CommitRow({
           {item.row.subject}
         </Text>
       </View>
-      <Text style={{ width: META_WIDTH.date, color: theme.colors.foregroundMuted, fontSize: 11.5 }}>
-        {formatDate(item.row.date)}
+      <Text
+        numberOfLines={1}
+        style={{
+          width: compact ? META_WIDTH.dateCompact : META_WIDTH.date,
+          color: theme.colors.foregroundMuted,
+          fontSize: compact ? 10.5 : 11.5,
+        }}
+      >
+        {formatCommitDate(item.row.date, compact)}
       </Text>
       {compact ? null : (
         <Text
@@ -325,6 +329,7 @@ export function GraphList({
           height: 31,
           flexDirection: "row",
           alignItems: "center",
+          overflow: "hidden",
           backgroundColor: theme.colors.surface1,
           borderBottomWidth: 1,
           borderBottomColor: theme.colors.border,
@@ -355,7 +360,7 @@ export function GraphList({
         </Text>
         <Text
           style={{
-            width: META_WIDTH.date,
+            width: compact ? META_WIDTH.dateCompact : META_WIDTH.date,
             color: theme.colors.foregroundMuted,
             fontSize: 10,
             fontWeight: "600",
